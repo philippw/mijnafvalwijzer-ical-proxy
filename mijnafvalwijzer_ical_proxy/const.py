@@ -29,3 +29,16 @@ class WasteType(str, Enum):
     TEXTIEL = "textiel"
     GROFVUIL = "grofvuil"
     KERSTBOMEN = "kerstbomen"
+
+
+WASTE_EMOJIS = {
+    WasteType.GFT.value: "🍌",
+    WasteType.RESTAFVAL.value: "🗑️",
+    WasteType.PAPIER.value: "📦",
+    WasteType.PMD.value: "🧴",
+    WasteType.PLASTIC.value: "🧴",
+    WasteType.GLAS.value: "🍾",
+    WasteType.TEXTIEL.value: "👕",
+    WasteType.GROFVUIL.value: "🛋️",
+    WasteType.KERSTBOMEN.value: "🎄",
+}

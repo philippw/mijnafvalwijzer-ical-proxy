@@ -50,6 +50,18 @@ You can also run the service with Docker Compose:
 docker compose up -d
 ```
 
+### Running Tests
+
+You can run the test suite using Python's built-in `unittest` runner or `pytest`:
+
+```bash
+# Using standard library unittest
+python -m unittest discover -s tests
+
+# Or using pytest
+pytest
+```
+
 ### Roadmap & Ideas
 
 For future enhancements (including neighbourhood calendar generator UI, caching, filters, and custom alarms), see [business_plan.md](business_plan.md).
