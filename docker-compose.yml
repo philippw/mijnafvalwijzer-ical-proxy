@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    container_name: mijnafvalwijzer-ical-proxy
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    volumes:
+      - .:/app

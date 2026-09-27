@@ -1,3 +1,4 @@
+from enum import Enum
 import re
 
 MONTHS = {
@@ -15,4 +16,16 @@ MONTHS = {
     "december":  12,
 }
 
-DATE_RE = re.compile("^(\w+) (\d+) (\w+)$")
+DATE_RE = re.compile(r"^(\w+) (\d+) (\w+)$")
+
+
+class WasteType(str, Enum):
+    GFT = "gft"
+    RESTAFVAL = "restafval"
+    PAPIER = "papier"
+    PMD = "pmd"
+    PLASTIC = "plastic"
+    GLAS = "glas"
+    TEXTIEL = "textiel"
+    GROFVUIL = "grofvuil"
+    KERSTBOMEN = "kerstbomen"
