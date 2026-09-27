@@ -40,4 +40,20 @@ The output of this endpoint could be used as a Json sensor in Home Assistant.
 
 It's also possible to retrieve an iCal file containing the next pickup moments of this year:
 
-    $ http://localhost:8000/ical/?postal_code=<postal code>&number=<number>&suffix=<optional suffix>
+    $ curl 'http://localhost:8000/ical/?postal_code=<postal code>&number=<number>&suffix=<optional suffix>'
+
+### Running with Docker
+
+You can also run the service with Docker Compose:
+
+```bash
+docker compose up -d
+```
+
+### Roadmap & Ideas
+
+For future enhancements (including neighbourhood calendar generator UI, caching, filters, and custom alarms), see [business_plan.md](business_plan.md).
+
+### Attribution
+
+This project is based on and extends the original work by Jeffrey Kog: [jeffreykog/mijnafvalwijzer-ical-proxy](https://github.com/jeffreykog/mijnafvalwijzer-ical-proxy).
