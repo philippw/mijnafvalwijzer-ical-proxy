@@ -50,7 +50,14 @@ async def fetch_pickup_moments(postal_code: str, number: str, suffix: str = "") 
             if "Geen gegevens gevonden" in html_text:
                 raise AddressNotFoundError(f"Address {clean_postal_code} {clean_number} {clean_suffix} not found")
 
-            for item in parser.find_all("a", class_=lambda c: c and "wasteInfoIcon" in c):
+            # Use dict keyed by (pickup_date, waste_type) to eliminate duplicates
+            # caused by responsive/mobile calendar copies or info sections in the DOM
+            moments_by_key: dict[tuple[date, str], PickupMoment] = {}
+
+            # Prioritize elements inside the calendar/year container if present
+            container = parser.find(id=lambda i: i and "jaar" in i.lower()) or parser
+
+            for item in container.find_all("a", class_=lambda c: c and "wasteInfoIcon" in c):
                 href = item.get("href", "")
                 waste_type = href.replace("#", "").replace("waste-", "")
                 if not waste_type or waste_type == "javascript:void(0);":
@@ -59,22 +66,27 @@ async def fetch_pickup_moments(postal_code: str, number: str, suffix: str = "") 
                     else:
                         waste_type = "unknown"
 
-                descr_el = item.find("span", class_="afvaldescr")
-                description = descr_el.get_text(strip=True).replace("\\,", ",") if descr_el else waste_type
-
+                # Check if item has date span (ignores separation guide links like #waste-minicontainer)
                 date_el = item.find("span", class_="span-line-break")
                 if not date_el:
                     continue
+
+                descr_el = item.find("span", class_="afvaldescr")
+                description = descr_el.get_text(strip=True).replace("\\,", ",") if descr_el else waste_type
 
                 pickup_date = _convert_date(date_el.get_text(strip=True))
                 if pickup_date is None:
                     continue
 
-                result.append(PickupMoment(
-                    waste_type=waste_type,
-                    pickup_date=pickup_date,
-                    description=description,
-                ))
+                key = (pickup_date, waste_type.lower())
+                if key not in moments_by_key:
+                    moments_by_key[key] = PickupMoment(
+                        waste_type=waste_type,
+                        pickup_date=pickup_date,
+                        description=description,
+                    )
+
+            result = sorted(moments_by_key.values(), key=lambda m: (m.pickup_date, m.waste_type))
 
     return result
 
